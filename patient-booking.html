@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Book Appointment"/>
+<meta name="theme-color" content="#4A3FBF"/>
+<title>Book an Appointment</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --purple: #4A3FBF;
+  --purple-light: #EEF0FF;
+  --teal: #0F6E56;
+  --teal-light: #E1F5EE;
+  --text: #1A1A2E;
+  --text-secondary: #6B6B8A;
+  --border: rgba(74,63,191,0.12);
+  --surface: #FFFFFF;
+  --bg: #F5F4FF;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.hero {
+  background: linear-gradient(135deg, #4A3FBF 0%, #7B74E0 100%);
+  padding: calc(var(--safe-top) + 32px) 24px 40px;
+  text-align: center;
+  color: #fff;
+}
+.hero-logo { font-size: 40px; margin-bottom: 12px; }
+.hero-title { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 6px; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+
+.card {
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  margin-top: -20px;
+  padding: 28px 20px calc(var(--safe-bottom) + 32px);
+  min-height: calc(100vh - 160px);
+}
+
+.section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; margin-top: 20px; }
+.section-title:first-child { margin-top: 0; }
+
+.form-field { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input {
+  width: 100%; padding: 13px 14px;
+  border: 1.5px solid var(--border); border-radius: 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  color: var(--text); background: var(--bg);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { outline: none; border-color: var(--purple); background: #fff; }
+.form-input.error { border-color: #E53935; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.type-opt {
+  padding: 14px 8px; text-align: center; border-radius: 14px;
+  font-size: 13px; font-weight: 500;
+  border: 1.5px solid var(--border); background: var(--bg);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.type-opt .type-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+.type-opt.selected { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+
+.submit-btn {
+  width: 100%; padding: 16px;
+  background: var(--purple); color: #fff;
+  border: none; border-radius: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px; font-weight: 600;
+  cursor: pointer; margin-top: 20px;
+  transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.submit-btn:active { background: #3a30a0; }
+.submit-btn:disabled { background: #A8A4D8; cursor: not-allowed; }
+
+/* Success screen */
+.success {
+  text-align: center; padding: 40px 20px;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+.success-icon { font-size: 64px; margin-bottom: 16px; }
+.success-title { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text); margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+.success-card {
+  background: var(--purple-light); border-radius: 16px; padding: 16px;
+  text-align: left; margin-bottom: 24px;
+  border: 1px solid rgba(74,63,191,0.15);
+}
+.success-row { display: flex; gap: 10px; align-items: center; padding: 6px 0; font-size: 14px; }
+.success-label { color: var(--text-secondary); font-size: 12px; width: 70px; flex-shrink: 0; }
+.success-val { font-weight: 500; }
+.book-again-btn {
+  padding: 13px 28px; border-radius: 14px;
+  background: var(--purple); color: #fff;
+  border: none; font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+}
+
+.note-box {
+  background: var(--teal-light); border-radius: 12px;
+  padding: 12px 14px; font-size: 13px; color: var(--teal);
+  line-height: 1.5; margin-bottom: 16px;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+
+.error-msg { font-size: 12px; color: #E53935; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo">🏥</div>
+  <div class="hero-title">Book an Appointment</div>
+  <div class="hero-sub">Fill in your details and we'll confirm your appointment</div>
+</div>
+
+<div class="card" id="main-card">
+  <div id="form-view">
+    <div class="note-box">
+      <span>ℹ️</span>
+      <span>All appointments are subject to confirmation. You will be contacted to confirm your booking.</span>
+    </div>
+
+    <div class="section-title">Your information</div>
+    <div class="form-field">
+      <label class="form-label">Full name *</label>
+      <input class="form-input" type="text" id="f-name" placeholder="Enter your full name"/>
+      <div class="error-msg" id="err-name"></div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Phone number *</label>
+      <input class="form-input" type="tel" id="f-phone" placeholder="+966 5X XXX XXXX"/>
+      <div class="error-msg" id="err-phone"></div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Age</label>
+      <input class="form-input" type="number" id="f-age" placeholder="e.g. 35" min="1" max="120"/>
+    </div>
+
+    <div class="section-title">Appointment details</div>
+    <div class="form-field">
+      <label class="form-label">Appointment type *</label>
+      <div class="type-toggle">
+        <div class="type-opt selected" id="opt-consultation" onclick="selectType('consultation')">
+          <span class="type-icon">🩺</span>Consultation
+        </div>
+        <div class="type-opt" id="opt-followup" onclick="selectType('followup')">
+          <span class="type-icon">🔄</span>Follow-up
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Preferred date *</label>
+        <input class="form-input" type="date" id="f-date"/>
+        <div class="error-msg" id="err-date"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Preferred time *</label>
+        <input class="form-input" type="time" id="f-time"/>
+        <div class="error-msg" id="err-time"></div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Reason for visit</label>
+      <textarea class="form-input" id="f-notes" rows="3" placeholder="Briefly describe your symptoms or reason…" style="resize:none;"></textarea>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitBooking()">
+      📅 Request Appointment
+    </button>
+  </div>
+
+  <div id="success-view" style="display:none;">
+    <div class="success">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Booking Received!</div>
+      <div class="success-sub">Your appointment request has been sent. We will contact you shortly to confirm.</div>
+      <div class="success-card" id="success-details"></div>
+      <button class="book-again-btn" onclick="resetForm()">Book another appointment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedType = 'consultation';
+
+// Set min date to today
+const todayStr = new Date().toISOString().split('T')[0];
+document.getElementById('f-date').min = todayStr;
+document.getElementById('f-date').value = todayStr;
+document.getElementById('f-time').value = '09:00';
+
+function selectType(type) {
+  selectedType = type;
+  document.getElementById('opt-consultation').classList.toggle('selected', type === 'consultation');
+  document.getElementById('opt-followup').classList.toggle('selected', type === 'followup');
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${parseInt(day)} ${M[parseInt(m)-1]} ${y}`;
+}
+function fmtTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':');
+  const hr = parseInt(h);
+  return `${hr > 12 ? hr - 12 : hr || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+function validate() {
+  let ok = true;
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const date = document.getElementById('f-date').value;
+  const time = document.getElementById('f-time').value;
+
+  document.getElementById('err-name').textContent = '';
+  document.getElementById('err-phone').textContent = '';
+  document.getElementById('err-date').textContent = '';
+  document.getElementById('err-time').textContent = '';
+
+  if (!name) { document.getElementById('err-name').textContent = 'Please enter your name'; ok = false; }
+  if (!phone) { document.getElementById('err-phone').textContent = 'Please enter your phone number'; ok = false; }
+  if (!date) { document.getElementById('err-date').textContent = 'Please select a date'; ok = false; }
+  if (date < todayStr) { document.getElementById('err-date').textContent = 'Date cannot be in the past'; ok = false; }
+  if (!time) { document.getElementById('err-time').textContent = 'Please select a time'; ok = false; }
+  return ok;
+}
+
+function submitBooking() {
+  if (!validate()) return;
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const booking = {
+    id: Date.now(),
+    patient: document.getElementById('f-name').value.trim(),
+    phone: document.getElementById('f-phone').value.trim(),
+    age: document.getElementById('f-age').value.trim(),
+    type: selectedType,
+    date: document.getElementById('f-date').value,
+    time: document.getElementById('f-time').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    status: 'pending',
+    remind: 15,
+    doctor: '',
+    source: 'patient-booking',
+    bookedAt: new Date().toISOString()
+  };
+
+  // Save to shared localStorage key
+  try {
+    const existing = JSON.parse(localStorage.getItem('appts') || '[]');
+    existing.push(booking);
+    localStorage.setItem('appts', JSON.stringify(existing));
+    const ni = parseInt(localStorage.getItem('nextId') || '1');
+    localStorage.setItem('nextId', Math.max(ni, booking.id + 1));
+  } catch(e) {}
+
+  setTimeout(() => {
+    showSuccess(booking);
+    btn.disabled = false;
+    btn.innerHTML = '📅 Request Appointment';
+  }, 800);
+}
+
+function showSuccess(b) {
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('success-view').style.display = 'block';
+  document.getElementById('success-details').innerHTML = `
+    <div class="success-row"><span class="success-label">Name</span><span class="success-val">${b.patient}</span></div>
+    <div class="success-row"><span class="success-label">Type</span><span class="success-val">${b.type === 'consultation' ? '🩺 Consultation' : '🔄 Follow-up'}</span></div>
+    <div class="success-row"><span class="success-label">Date</span><span class="success-val">${fmtDate(b.date)}</span></div>
+    <div class="success-row"><span class="success-label">Time</span><span class="success-val">${fmtTime(b.time)}</span></div>
+    <div class="success-row"><span class="success-label">Phone</span><span class="success-val">${b.phone}</span></div>
+  `;
+}
+
+function resetForm() {
+  document.getElementById('form-view').style.display = 'block';
+  document.getElementById('success-view').style.display = 'none';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-phone').value = '';
+  document.getElementById('f-age').value = '';
+  document.getElementById('f-date').value = todayStr;
+  document.getElementById('f-time').value = '09:00';
+  document.getElementById('f-notes').value = '';
+  selectType('consultation');
+}
+</script>
+</body>
+</html>
